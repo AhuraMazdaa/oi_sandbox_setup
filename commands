@@ -1,0 +1,21 @@
+#!/bin/bash
+# To build Docker Image
+docker build --no-cache -t sandbox-open-inv-env .
+# To Run Docker after build
+docker run -it --rm --name <new_oi_sandbox_name> --env-file .env -v ~/Documents/open_interpreter_workspace/open_interpreter_container/:/oi_root_dir sandbox-open-inv-env
+
+#the command that worked (script generation and execution)
+i -y --model openai/qwen2.5-coder:7b
+export OPENAI_API_BASE="http://localhost:11434/v1"
+export OPENAI_API_KEY="ollama"
+
+interpreter --model ollama/qwen3.5-coder:7b
+
+# Connects a shell to a running container
+docker exec -it <container_name_or_id> bash
+
+# launch oi with gemini model
+i -y --model gemini/gemini-3.5-flash-lite
+
+# launching oi inside the container and passing a file as the commands to be executed.
+i -y --model gemini/gemini-3.5-flash-lite <<< "Read the prompt_command.md file and do as the instruction say in that file."
